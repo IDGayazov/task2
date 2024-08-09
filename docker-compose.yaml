@@ -1,0 +1,29 @@
+version: '2.28.1'
+services:
+  service-db:
+    image: postgres:10-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      -  /var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:7
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - "5050:80"
+    volumes:
+      - /var/lib/pgadmin
+
+volumes:
+  db-data:
+  pgadmin-data:
